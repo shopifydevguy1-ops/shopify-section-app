@@ -5,7 +5,7 @@ deployment:
     - export TMPDIR=/tmp/cpanel-deploy-$$
     - mkdir -p $TMPDIR
     - /bin/cp -R $DEPLOYPATH/* $TMPDIR/ 2>/dev/null || true
-    - /bin/cp -R $DEPLOYPATH/.[^.]* $TMPDIR/ 2>/dev/null || true
+    - cd $DEPLOYPATH && find . -maxdepth 1 -name '.*' ! -name '.' ! -name '..' -exec /bin/cp -R {} $TMPDIR/ \; 2>/dev/null || true
     - cd $TMPDIR
     - /usr/local/bin/npm install --production=false
     - /usr/local/bin/npx prisma generate
