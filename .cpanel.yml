@@ -3,7 +3,6 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home/azwywnto/repositories/shopify-section-app
     - cd $DEPLOYPATH
-    - /usr/local/bin/npm install --production=false
-    - /usr/local/bin/npx prisma generate
-    - /usr/local/bin/npm run build
-
+    - npm install --production=false
+    - npx prisma generate
+    - npm run build
