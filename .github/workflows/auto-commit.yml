@@ -8,15 +8,18 @@ on:
 jobs:
   auto-commit:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
+        persist-credentials: true
     
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '18'
     
@@ -31,6 +34,10 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add .
-        git diff --staged --quiet || git commit -m "Auto-commit: Update project files"
-        git push
+        if ! git diff --staged --quiet; then
+          git commit -m "Auto-commit: Update project files"
+          git push origin HEAD:main
+        else
+          echo "No changes to commit"
+        fi
 
