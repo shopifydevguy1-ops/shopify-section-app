@@ -1,0 +1,168 @@
+# cPanel Configuration for Z.com Hosting
+# This file helps configure your Next.js application for Z.com's cPanel Node.js Application Manager
+
+# Application Configuration
+application:
+  name: shopify-section-generator
+  version: 1.0.0
+  description: Shopify Section Generator - AI-powered Shopify Liquid section generator
+
+# Node.js Configuration
+nodejs:
+  version: 18.x
+  # Use latest LTS version available on Z.com
+  # Options: 18.x, 20.x (check Z.com panel for available versions)
+
+# Build Configuration
+build:
+  # Command to run before starting the application
+  command: npm run build
+  # Timeout in seconds (adjust if build takes longer)
+  timeout: 600
+
+# Start Configuration
+start:
+  # Command to start the application
+  command: npm start
+  # Alternative: node server.js (if using custom server)
+  # command: node server.js
+  
+# Environment Variables
+# These will be set in cPanel Node.js Application Manager
+# Add these in the "Environment variables" section of your Node.js app
+environment:
+  required:
+    - DATABASE_URL
+    - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+    - CLERK_SECRET_KEY
+    - AI_API_KEY
+    - AI_API_URL
+    - AI_MODEL
+    - PAYMONGO_SECRET_KEY
+    - PAYMONGO_PUBLIC_KEY
+    - NEXT_PUBLIC_APP_URL
+    - NODE_ENV
+  
+  # Example values (replace with your actual values in cPanel)
+  examples:
+    DATABASE_URL: "postgresql://username:password@localhost:5432/database_name"
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_live_..."
+    CLERK_SECRET_KEY: "sk_live_..."
+    AI_API_KEY: "your_google_ai_studio_api_key"
+    AI_API_URL: "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent"
+    AI_MODEL: "gemini-2.0-flash-exp"
+    PAYMONGO_SECRET_KEY: "sk_live_..."
+    PAYMONGO_PUBLIC_KEY: "pk_live_..."
+    NEXT_PUBLIC_APP_URL: "https://yourdomain.com"
+    NODE_ENV: "production"
+
+# Port Configuration
+port:
+  # Z.com usually auto-detects the port
+  # Default: 3000
+  # If you need a specific port, set it via PORT environment variable
+  default: 3000
+  # Set via environment variable: PORT=3000
+
+# Application Root
+# Important: Path must NOT contain spaces
+# Example: /home/username/repositories/shopify-section-app
+root:
+  # Update this to your actual application path on Z.com
+  # This is typically set in cPanel Node.js Application Manager
+  path: "/home/azwywnto/repositories/shopify-section-app"
+  # ⚠️ Make sure the path has no spaces!
+
+# Application URL
+url:
+  # Your domain or subdomain
+  # Example: shopifysectiongen.com or app.yourdomain.com
+  domain: "yourdomain.com"
+  # Set this in cPanel Node.js Application Manager
+
+# Dependencies
+dependencies:
+  # These are installed via npm install
+  # Make sure package.json is in the application root
+  install_command: "npm install"
+  # For production, you might want to use:
+  # install_command: "npm ci --production=false"
+
+# Database Setup
+database:
+  type: postgresql
+  # Run migrations after deployment
+  migrations:
+    command: "npx prisma db push"
+    # Or use: "npx prisma migrate deploy" for production migrations
+
+# File Structure
+files:
+  # Files to include
+  include:
+    - "package.json"
+    - "package-lock.json"
+    - "server.js"
+    - "next.config.js"
+    - "tsconfig.json"
+    - "tailwind.config.ts"
+    - "postcss.config.js"
+    - "prisma/"
+    - "app/"
+    - "components/"
+    - "lib/"
+    - "middleware.ts"
+    - "public/"
+    - "sections/"
+  
+  # Files to exclude (don't upload these)
+  exclude:
+    - "node_modules/"
+    - ".next/"
+    - ".env"
+    - ".env.local"
+    - ".git/"
+    - "*.log"
+    - ".DS_Store"
+
+# Deployment Steps
+deployment:
+  steps:
+    1: "Upload files to Z.com (via Git, FTP, or cPanel File Manager)"
+    2: "Create Node.js application in cPanel Node.js Application Manager"
+    3: "Set application root path (no spaces!)"
+    4: "Set application URL"
+    5: "Configure Node.js version (18.x or higher)"
+    6: "Set all environment variables"
+    7: "Set build command: npm run build"
+    8: "Set start command: npm start"
+    9: "Run database migrations: npx prisma db push"
+    10: "Restart the application"
+    11: "Test the application"
+
+# Troubleshooting
+troubleshooting:
+  common_issues:
+    - issue: "Directory should not contain spaces"
+      solution: "Check your application root path - remove any spaces or use hyphens/underscores"
+    
+    - issue: "Build fails"
+      solution: "Check Node.js version (needs 18+), verify all dependencies in package.json"
+    
+    - issue: "Environment variables not loading"
+      solution: "Make sure to click 'DONE' after adding each variable, restart the app"
+    
+    - issue: "Database connection error"
+      solution: "Verify DATABASE_URL format, check database is accessible, ensure firewall allows connections"
+    
+    - issue: "Port already in use"
+      solution: "Z.com usually handles this automatically, but you can set PORT environment variable"
+
+# Notes
+notes:
+  - "This file is for reference only - actual configuration is done in cPanel Node.js Application Manager"
+  - "Make sure to set NODE_ENV=production for production deployment"
+  - "SSL/HTTPS is required for Clerk and PayMongo webhooks"
+  - "Keep your .env file secure and never commit it to Git"
+  - "For Git deployment, connect your Z.com hosting to your GitHub repository"
+
