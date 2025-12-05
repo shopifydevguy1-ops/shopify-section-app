@@ -3,6 +3,8 @@ import { getCurrentUser } from "@/lib/auth"
 import { createSubscription } from "@/lib/paymongo"
 import { prisma } from "@/lib/db"
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     const user = await getCurrentUser()

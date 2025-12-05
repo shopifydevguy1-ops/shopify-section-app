@@ -4,6 +4,8 @@ import { searchSections } from "@/lib/sections"
 import { generateSectionCode } from "@/lib/ai"
 import { prisma } from "@/lib/db"
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: Request) {
   try {
     const user = await getCurrentUser()
