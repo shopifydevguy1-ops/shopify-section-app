@@ -11,6 +11,14 @@ const createPrismaClient = () => {
     throw new Error('DATABASE_URL environment variable is required')
   }
 
+  // Check if this is a Supabase connection
+  const isSupabase = process.env.DATABASE_URL.includes('supabase.co')
+  
+  if (isSupabase && !process.env.DATABASE_URL.includes('sslmode')) {
+    console.warn('⚠️ Supabase connection detected but SSL mode not specified.')
+    console.warn('   Add ?sslmode=require to your DATABASE_URL for better security.')
+  }
+
   return new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
   })
