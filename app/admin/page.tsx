@@ -1,7 +1,7 @@
 "use client"
 
 import { useUser } from "@clerk/nextjs"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -23,6 +23,7 @@ import {
 
 export default function AdminPage() {
   const { isSignedIn, isLoaded } = useUser()
+  const router = useRouter()
   const { toast } = useToast()
   const [isAdmin, setIsAdmin] = useState(false)
   const [users, setUsers] = useState<any[]>([])
@@ -35,7 +36,7 @@ export default function AdminPage() {
   useEffect(() => {
     if (!isLoaded) return
     if (!isSignedIn) {
-      redirect("/sign-in")
+      router.push("/sign-in")
       return
     }
 
@@ -44,16 +45,16 @@ export default function AdminPage() {
       .then(res => res.json())
       .then(data => {
         if (!data.isAdmin) {
-          redirect("/dashboard")
+          router.push("/dashboard")
           return
         }
         setIsAdmin(true)
         loadData()
       })
       .catch(() => {
-        redirect("/dashboard")
+        router.push("/dashboard")
       })
-  }, [isSignedIn, isLoaded])
+  }, [isSignedIn, isLoaded, router])
 
   const loadData = async () => {
     try {

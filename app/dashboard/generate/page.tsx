@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useUser } from "@clerk/nextjs"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -23,6 +23,7 @@ const KEYWORD_SUGGESTIONS = [
 
 export default function GeneratePage() {
   const { isSignedIn, isLoaded } = useUser()
+  const router = useRouter()
   const { toast } = useToast()
   const [keyword, setKeyword] = useState("")
   const [customizations, setCustomizations] = useState("")
@@ -33,7 +34,7 @@ export default function GeneratePage() {
   useEffect(() => {
     if (!isLoaded) return
     if (!isSignedIn) {
-      redirect("/sign-in")
+      router.push("/sign-in")
       return
     }
 
@@ -41,7 +42,7 @@ export default function GeneratePage() {
       .then(res => res.json())
       .then(data => setUserData(data))
       .catch(console.error)
-  }, [isSignedIn, isLoaded])
+  }, [isSignedIn, isLoaded, router])
 
   const handleGenerate = async () => {
     if (!keyword.trim()) {

@@ -1,7 +1,7 @@
 "use client"
 
 import { useUser } from "@clerk/nextjs"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -11,13 +11,14 @@ import { motion } from "framer-motion"
 
 export default function AccountPage() {
   const { isSignedIn, isLoaded, user } = useUser()
+  const router = useRouter()
   const [userData, setUserData] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!isLoaded) return
     if (!isSignedIn) {
-      redirect("/sign-in")
+      router.push("/sign-in")
       return
     }
 
@@ -28,7 +29,7 @@ export default function AccountPage() {
         setLoading(false)
       })
       .catch(() => setLoading(false))
-  }, [isSignedIn, isLoaded])
+  }, [isSignedIn, isLoaded, router])
 
   if (!isLoaded || loading) {
     return <div className="min-h-screen flex items-center justify-center">Loading...</div>
